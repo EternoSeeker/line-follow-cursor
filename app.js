@@ -17,7 +17,7 @@ let mouseStillTime = 0;
 let hasStarted = false;
 
 // Settings
-const MAX_POINTS = 5;
+const MAX_POINTS = 6;
 const SPEED = 2;
 const LIFETIME_SECONDS = 2;
 const POINT_RADIUS = 2;

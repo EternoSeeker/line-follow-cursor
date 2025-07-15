@@ -17,19 +17,14 @@ body {
 }
 
 .cursor {
-  position: fixed;
-  width: 20px;
-  height: 20px;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.8) 0%,
-    rgba(255, 255, 255, 0.3) 50%,
-    transparent 100%
-  );
-  border-radius: 50%;
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
   pointer-events: none;
-  z-index: 1000;
+  background: url("assets/cursor-up-left.svg") no-repeat center center;
+  background-size: contain;
   transform: translate(-50%, -50%);
+  z-index: 1000;
 }
 
 .instruction {
