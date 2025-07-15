@@ -24,7 +24,7 @@ const POINT_RADIUS = 2;
 const GLOW_RADIUS = 100;
 
 // Constants
-const MOUSE_STILL_THRESHOLD = 800; // ms before considering mouse still
+const MOUSE_STILL_THRESHOLD = 700; // ms before considering mouse still
 const SPAWN_DELAY_MIN = 100; // ms
 const SPAWN_DELAY_MAX = 2000; // ms
 const MOUSE_MOVE_THRESHOLD = 5; // pixels
@@ -84,6 +84,7 @@ class Point {
     this.maxLifetime = this.lifetime;
     this.trail = [];
     this.directionChangeTimer = 500;
+    this.where = Math.random() > 0.5;
   }
 
   update(deltaTime) {
@@ -120,16 +121,22 @@ class Point {
       if (absDx > absDy) {
         // Primarily horizontal movement
         moveX = Math.sign(dx) * SPEED;
-        if (absDy > 0) {
-          // Add vertical component for 45-degree movement
-          moveY = Math.sign(dy) * Math.min(SPEED, absDy);
+        if (this.where) {
+          if (absDx == absDy) {
+            moveY = Math.sign(dy) * SPEED;
+          }
+        } else {
+          moveY = Math.sign(dy) * SPEED;
         }
       } else {
         // Primarily vertical movement
         moveY = Math.sign(dy) * SPEED;
-        if (absDx > 0) {
-          // Add horizontal component for 45-degree movement
-          moveX = Math.sign(dx) * Math.min(SPEED, absDx);
+        if (this.where) {
+          if (absDx == absDy) {
+            moveX = Math.sign(dx) * SPEED;
+          }
+        } else {
+          moveX = Math.sign(dx) * SPEED;
         }
       }
 
