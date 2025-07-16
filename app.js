@@ -84,7 +84,7 @@ class Point {
     this.maxLifetime = this.lifetime;
     this.trail = [];
     this.directionChangeTimer = 500;
-    this.where = Math.random() > 0.5;
+    this.phase = Math.random() > 0.5 ? "diagonal-straight" : "straight-diagonal";
   }
 
   update(deltaTime) {
@@ -121,7 +121,7 @@ class Point {
       if (absDx > absDy) {
         // Primarily horizontal movement
         moveX = Math.sign(dx) * SPEED;
-        if (this.where) {
+        if (this.phase == "straight-diagonal") {
           if (absDx == absDy) {
             moveY = Math.sign(dy) * SPEED;
           }
@@ -131,7 +131,7 @@ class Point {
       } else {
         // Primarily vertical movement
         moveY = Math.sign(dy) * SPEED;
-        if (this.where) {
+        if (this.phase == "straight-diagonal") {
           if (absDx == absDy) {
             moveX = Math.sign(dx) * SPEED;
           }
