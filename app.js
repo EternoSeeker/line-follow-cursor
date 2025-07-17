@@ -84,7 +84,8 @@ class Point {
     this.maxLifetime = this.lifetime;
     this.trail = [];
     this.directionChangeTimer = 500;
-    this.phase = Math.random() > 0.5 ? "diagonal-straight" : "straight-diagonal";
+    this.phase =
+      Math.random() > 0.5 ? "diagonal-straight" : "straight-diagonal";
   }
 
   update(deltaTime) {
@@ -108,38 +109,37 @@ class Point {
     // Calculate distance to target
     const dx = this.targetX - this.x;
     const dy = this.targetY - this.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
+    const distanceSq = dx * dx + dy * dy;
 
-    if (distance > 1) {
+    if (distanceSq > 1) {
       // Calculate optimal movement (straight lines or 45-degree angles)
       let moveX = 0;
       let moveY = 0;
 
       const absDx = Math.abs(dx);
       const absDy = Math.abs(dy);
+      const signDx = Math.sign(dx);
+      const signDy = Math.sign(dy);
 
       if (absDx > absDy) {
-        // Primarily horizontal movement
-        moveX = Math.sign(dx) * SPEED;
-        if (this.phase == "straight-diagonal") {
-          if (absDx == absDy) {
-            moveY = Math.sign(dy) * SPEED;
-          }
-        } else {
-          moveY = Math.sign(dy) * SPEED;
-        }
+        // Horizontal dominant
+        moveX = signDx * SPEED;
+        moveY =
+          this.phase === "straight-diagonal" && absDx === absDy
+            ? signDy * SPEED
+            : this.phase === "diagonal-straight"
+            ? signDy * SPEED
+            : 0;
       } else {
-        // Primarily vertical movement
-        moveY = Math.sign(dy) * SPEED;
-        if (this.phase == "straight-diagonal") {
-          if (absDx == absDy) {
-            moveX = Math.sign(dx) * SPEED;
-          }
-        } else {
-          moveX = Math.sign(dx) * SPEED;
-        }
+        // Vertical dominant
+        moveY = signDy * SPEED;
+        moveX =
+          this.phase === "straight-diagonal" && absDx === absDy
+            ? signDx * SPEED
+            : this.phase === "diagonal-straight"
+            ? signDx * SPEED
+            : 0;
       }
-
       // Apply movement
       this.x += moveX;
       this.y += moveY;
@@ -264,7 +264,6 @@ function animate(currentTime) {
     // Draw points
     points.forEach((point) => point.draw());
 
-    // Clear gradient cache occasionally to prevent memory leaks
     if (gradientCache.size > 1000) {
       gradientCache.clear();
     }
@@ -277,5 +276,4 @@ function animate(currentTime) {
 cursor.style.left = mouseX + "px";
 cursor.style.top = mouseY + "px";
 
-// Start animation
 requestAnimationFrame(animate);
